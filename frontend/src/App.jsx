@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import {Link, Outlet} from "react-router-dom"
+import React, { useState,useEffect } from "react";
+import {Link, Outlet,useLocation} from "react-router-dom"
 import "./App.css"
 import {
   MenuFoldOutlined,
@@ -10,21 +10,44 @@ import {
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import Camera1 from "./pages/Camera1";
+import ProjectTitle from "./components/ProjectTitle";
 const { Header, Sider, Content } = Layout;
+
+
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
+  
+    // Step 2: Use useLocation to get current path
+    const location = useLocation();
+  
+    // Step 3: Dynamically set the title based on route
+    const [title, setTitle] = useState("CCTV Camera Surveillance");
+  
+    useEffect(() => {
+      switch (location.pathname) {
+        case "/camera1":
+          setTitle("Camera 1 Surveillance");
+          break;
+        case "/camera2":
+          setTitle("Shopping Mall Camera Surveillance");
+          break;
+        case "/camera3":
+          setTitle("Shop Live Camera Surveillance");
+          break;
+        default:
+          setTitle("CCTV Camera Surveillance");
+      }
+    }, [location.pathname]);
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed} theme="dark">
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["1"]}
           items={[
             {
               key: "1",
@@ -66,6 +89,7 @@ const App = () => {
               }}
             />
           </div>
+          <ProjectTitle title={title}/>
           <div
             style={{
               fontSize: "18px",
